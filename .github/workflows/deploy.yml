@@ -33,7 +33,7 @@ jobs:
           node-version: lts/*
 
       - name: Install packages
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build website
         run: npm run build
