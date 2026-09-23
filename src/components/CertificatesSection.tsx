@@ -1,17 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  FileCheck,
-  Upload,
   ZoomIn,
   X,
-  Edit2,
-  Check,
-  RotateCcw,
   ShieldCheck,
-  Info,
   Maximize2,
-  ExternalLink,
   Award,
 } from 'lucide-react';
 import { INITIAL_CERTIFICATES } from '../data/websiteData';
@@ -19,77 +12,9 @@ import { CertificateItem } from '../types';
 import { CertificateDocumentView } from './CertificateDocumentView';
 
 export const CertificatesSection: React.FC = () => {
-  const [certificates, setCertificates] = useState<CertificateItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('charvi_certificates_v2');
-      if (saved) {
-        const parsed: CertificateItem[] = JSON.parse(saved);
-        // Merge with INITIAL_CERTIFICATES to guarantee accurate details
-        return INITIAL_CERTIFICATES.map((initCert) => {
-          const match = parsed.find((p) => p.id === initCert.id);
-          return match ? { ...initCert, imageUrl: match.imageUrl, caption: match.caption || initCert.caption } : initCert;
-        });
-      }
-    } catch (e) {
-      console.warn('Unable to load certificates from localStorage', e);
-    }
-    return INITIAL_CERTIFICATES;
-  });
-
+const [certificates] = useState<CertificateItem[]>(INITIAL_CERTIFICATES);
   const [selectedCert, setSelectedCert] = useState<CertificateItem | null>(null);
-  const [editingCaptionId, setEditingCaptionId] = useState<string | null>(null);
-  const [tempCaption, setTempCaption] = useState<string>('');
-  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('charvi_certificates_v2', JSON.stringify(certificates));
-    } catch (e) {
-      console.warn('Unable to save certificates to localStorage', e);
-    }
-  }, [certificates]);
-
-  const handleFileUpload = (id: string, file: File) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setCertificates((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, imageUrl: result } : c))
-      );
-      if (selectedCert?.id === id) {
-        setSelectedCert((prev) => (prev ? { ...prev, imageUrl: result } : null));
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleResetImage = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCertificates((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, imageUrl: undefined } : c))
-    );
-    if (selectedCert?.id === id) {
-      setSelectedCert((prev) => (prev ? { ...prev, imageUrl: undefined } : null));
-    }
-  };
-
-  const handleStartEditCaption = (cert: CertificateItem, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setEditingCaptionId(cert.id);
-    setTempCaption(cert.caption);
-  };
-
-  const handleSaveCaption = (id: string, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setCertificates((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, caption: tempCaption } : c))
-    );
-    if (selectedCert?.id === id) {
-      setSelectedCert((prev) => (prev ? { ...prev, caption: tempCaption } : null));
-    }
-    setEditingCaptionId(null);
-  };
 
   // Keyboard shortcut for lightbox close
   useEffect(() => {
@@ -159,20 +84,8 @@ export const CertificatesSection: React.FC = () => {
               transition={{ duration: 0.5, delay: index * 0.12 }}
               className="group rounded-3xl bg-white/[0.03] border border-white/10 hover:border-[#D9A441]/50 p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-black/70 relative"
             >
-              {/* Hidden File Input */}
-              <input
-                type="file"
-                accept="image/*"
-                ref={(el) => {
-                  fileInputRefs.current[cert.id] = el;
-                }}
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleFileUpload(cert.id, file);
-                }}
-              />
-
+           
+            
               {/* Certificate Image Frame */}
               <div
                 onClick={() => setSelectedCert(cert)}
@@ -228,16 +141,10 @@ export const CertificatesSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Action Bar (Upload / Replace / Reset) */}
+              {/* Certificate Actions  */}
               <div className="mt-4 flex items-center justify-between gap-2 pt-3 border-t border-white/10">
-                <button
-                  type="button"
-                  onClick={() => fileInputRefs.current[cert.id]?.click()}
-                  className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-[#D9A441] transition-colors py-1"
-                >
-                  <Upload className="w-3.5 h-3.5 text-[#D9A441]" />
-                  <span>{cert.imageUrl ? 'Replace Upload' : 'Upload Scan Image'}</span>
-                </button>
+               
+                 
 
                 <div className="flex items-center gap-2">
                   <button
@@ -248,61 +155,10 @@ export const CertificatesSection: React.FC = () => {
                     <Maximize2 className="w-3 h-3" />
                     <span>View Certificate</span>
                   </button>
-
-                  {cert.imageUrl && (
-                    <button
-                      type="button"
-                      onClick={(e) => handleResetImage(cert.id, e)}
-                      className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-rose-400 transition-colors"
-                      title="Reset to default document"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      <span>Reset</span>
-                    </button>
-                  )}
+                   
                 </div>
               </div>
-
-              {/* Editable Caption Area */}
-              <div className="mt-3 pt-3 border-t border-white/5">
-                {editingCaptionId === cert.id ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={tempCaption}
-                      onChange={(e) => setTempCaption(e.target.value)}
-                      placeholder="Add caption or accreditation details..."
-                      className="w-full bg-[#071A2B] border border-[#D9A441] text-xs text-white px-3 py-1.5 rounded-lg focus:outline-none"
-                      autoFocus
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') handleSaveCaption(cert.id);
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => handleSaveCaption(cert.id, e)}
-                      className="p-1.5 rounded-lg bg-[#D9A441] text-[#071A2B] hover:bg-white transition-colors"
-                      title="Save caption"
-                    >
-                      <Check className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between group/caption">
-                    <p className="text-xs text-slate-400 italic">
-                      "{cert.caption}"
-                    </p>
-                    <button
-                      type="button"
-                      onClick={(e) => handleStartEditCaption(cert, e)}
-                      className="opacity-0 group-hover/caption:opacity-100 p-1 text-slate-400 hover:text-[#D9A441] transition-opacity"
-                      title="Edit Caption"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                )}
-              </div>
+              
             </motion.div>
           ))}
         </div>
@@ -358,38 +214,13 @@ export const CertificatesSection: React.FC = () => {
                       className="max-h-[60vh] w-auto object-contain rounded-xl shadow-2xl border border-white/10"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="mt-4 flex items-center gap-3">
-                      <button
-                        onClick={() => fileInputRefs.current[selectedCert.id]?.click()}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-semibold"
-                      >
-                        <Upload className="w-3.5 h-3.5 text-[#D9A441]" />
-                        <span>Change Scanned Image</span>
-                      </button>
-                      <button
-                        onClick={(e) => handleResetImage(selectedCert.id, e)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold"
-                      >
-                        <RotateCcw className="w-3.5 h-3.5" />
-                        <span>Show Digitized Certificate</span>
-                      </button>
-                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     <CertificateDocumentView cert={selectedCert} isCompact={false} />
-                    <div className="text-center pt-2">
-                      <button
-                        onClick={() => fileInputRefs.current[selectedCert.id]?.click()}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-[#D9A441] hover:text-[#071A2B] text-white font-semibold text-xs transition-all border border-white/15"
-                      >
-                        <Upload className="w-3.5 h-3.5" />
-                        <span>Upload Scanned PDF / Image File for this Slot</span>
-                      </button>
-                    </div>
                   </div>
                 )}
-              </div>
+                 </div>
 
               <div className="mt-4 pt-3 border-t border-white/10 text-xs text-slate-400 text-center">
                 Press <span className="font-mono text-slate-200">ESC</span> or click outside to return
