@@ -61,9 +61,6 @@ export const ApproachSection: React.FC = () => {
 
         {/* Desktop Horizontal Process Line & Cards */}
         <div className="relative">
-          {/* Connecting line on desktop */}
-          <div className="hidden lg:block absolute top-1/2 left-12 right-12 h-[2px] bg-gradient-to-r from-[#D9A441] via-sky-400 to-[#D9A441] -translate-y-12 opacity-30 pointer-events-none" />
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {APPROACH_STEPS.map((step, index) => (
               <motion.div
