@@ -124,12 +124,8 @@ export const Hero: React.FC = () => {
         </motion.div>
 
         {/* Hero Visual Card with Floating Stats */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.35, ease: 'easeOut' }}
-          className="mt-14 relative max-w-5xl mx-auto"
-        >
+        <div className="mt-14 relative max-w-5xl mx-auto">
+        
           {/* Outer glow frame */}
           <div className="relative rounded-2xl sm:rounded-3xl p-1 bg-gradient-to-b from-white/20 via-white/5 to-[#D9A441]/20 shadow-2xl shadow-black/80">
             <div className="relative rounded-[22px] sm:rounded-[30px] overflow-hidden bg-[#0D1117]">
@@ -139,6 +135,9 @@ export const Hero: React.FC = () => {
                   src={heroImage}
                   alt="Charvi Staffing Solutions - Industrial workforce and plant operations"
                   className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                 />
                 {/* Gradient overlays for readability and corporate mood */}
@@ -222,8 +221,8 @@ export const Hero: React.FC = () => {
             <div className="text-xs font-semibold text-slate-200">
               Skilled • Semi-Skilled • Unskilled
             </div>
-          </motion.div>
-        </motion.div>
+          </motion.div> 
+      </div>
       </div>
     </section>
   );
