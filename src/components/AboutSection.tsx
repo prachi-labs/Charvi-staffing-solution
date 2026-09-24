@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { CheckCircle, ArrowRight, ShieldCheck, Award, Factory } from 'lucide-react';
 import { COMPANY_INFO } from '../data/websiteData';
-import aboutImage from '../assets/images/about_workforce_1790072843546.jpg';
+import aboutImage from '../assets/images/about_workforce.webp';
 
 export const AboutSection: React.FC = () => {
   const scrollToExpertise = () => {
