@@ -11,7 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/websiteData';
-import heroImage from '../assets/images/hero_workforce_1790072823030.jpg';
+import heroImage from '../assets/images/hero_workforce.webp';
 
 export const Hero: React.FC = () => {
   const scrollToSection = (id: string) => {
