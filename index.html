@@ -2,18 +2,129 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Charvi Staffing Solutions | Manpower & Workforce Solutions</title>
-    <meta name="description" content="Charvi Staffing Solutions provides reliable skilled, semi-skilled and unskilled manpower, workforce management and operational support across Rajasthan, Madhya Pradesh and Pan India." />
-    <meta property="og:title" content="Charvi Staffing Solutions | Manpower & Workforce Solutions" />
-    <meta property="og:description" content="Charvi Staffing Solutions provides reliable skilled, semi-skilled and unskilled manpower, workforce management and operational support across Rajasthan, Madhya Pradesh and Pan India." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#071A2B" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>
+      Charvi Staffing Solutions | Manpower & Workforce Solutions
+    </title>
+
+    <meta
+      name="description"
+      content="Charvi Staffing Solutions provides reliable skilled, semi-skilled and unskilled manpower, workforce management and operational support across Rajasthan, Madhya Pradesh and Pan India."
+    />
+
+    <meta
+      property="og:title"
+      content="Charvi Staffing Solutions | Manpower & Workforce Solutions"
+    />
+
+    <meta
+      property="og:description"
+      content="Charvi Staffing Solutions provides reliable skilled, semi-skilled and unskilled manpower, workforce management and operational support across Rajasthan, Madhya Pradesh and Pan India."
+    />
+
+    <meta
+      property="og:type"
+      content="website"
+    />
+
+    <meta
+      name="twitter:card"
+      content="summary_large_image"
+    />
+
+    <meta
+      name="theme-color"
+      content="#071A2B"
+    />
   </head>
-  <body class="bg-[#071A2B] text-slate-100 antialiased selection:bg-[#D9A441] selection:text-[#071A2B]">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+
+  <body
+    class="bg-[#071A2B] text-slate-100 antialiased selection:bg-[#D9A441] selection:text-[#071A2B]"
+  >
+
+    <!-- React application root -->
+    <div id="root">
+
+      <!-- Instant loading screen shown before React loads -->
+      <div
+        id="initial-loader"
+        style="
+          min-height: 100vh;
+          background: #071A2B;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          font-family: Arial, sans-serif;
+          color: #ffffff;
+          text-align: center;
+          padding: 24px;
+          box-sizing: border-box;
+        "
+      >
+
+        <div
+          style="
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+          "
+        >
+          Charvi Staffing Solutions
+        </div>
+
+        <div
+          style="
+            margin-top: 10px;
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.5;
+          "
+        >
+          Manpower & Workforce Solutions
+        </div>
+
+        <div
+          style="
+            width: 40px;
+            height: 40px;
+            margin-top: 24px;
+            border: 3px solid rgba(255,255,255,0.20);
+            border-top-color: #D9A441;
+            border-radius: 50%;
+            animation: charvi-spin 0.8s linear infinite;
+          "
+        ></div>
+
+      </div>
+
+      <!-- Loader animation -->
+      <style>
+        @keyframes charvi-spin {
+          from {
+            transform: rotate(0deg);
+          }
+
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      </style>
+
+    </div>
+
+    <!-- React application -->
+    <script
+      type="module"
+      src="/src/main.tsx"
+    ></script>
+
   </body>
 </html>
 
