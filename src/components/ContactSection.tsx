@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import emailjs from '@emailjs/browser';
 
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -61,7 +60,7 @@ export const ContactSection: React.FC = () => {
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    }  else if (!formData.email.includes('@') || !formData.email.includes('.')) {
       newErrors.email = 'Please provide a valid email address';
     }
 
@@ -77,7 +76,7 @@ export const ContactSection: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   if (!validate()) return;
@@ -86,30 +85,38 @@ export const ContactSection: React.FC = () => {
   setIsSuccess(false);
 
   try {
-    await emailjs.send(
-      'service_b25dd3b',
-      'template_blp5uq',
+    const response = await fetch(
+      'https://script.google.com/macros/s/AKfycbzBShJJZ11hiBfFSvmLCCAO1t4laTx1xd-6093c8ccWYLG5lna0ceercEt2R7A7ybwdzg/exec',
       {
-        name: formData.name,
-        company: formData.companyName,
-        phone: formData.phone,
-        email: formData.email,
-        location: formData.location,
-        workforce_category: formData.requirement,
-        requirement_details: formData.message,
-      },
-      {
-        publicKey: '0VKBrkHL2kMofxfo0',
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          company: formData.companyName,
+          phone: formData.phone,
+          email: formData.email,
+          location: formData.location,
+          workforce_category: formData.requirement,
+          requirement_details: formData.message,
+        }),
       }
     );
+
+    console.log('Enquiry submitted:', response);
 
     setIsSubmitting(false);
     setIsSuccess(true);
     setFormData(initialForm);
     setErrors({});
+
   } catch (error) {
-    console.error('EmailJS Error:', error);
+    console.error('Form submission error:', error);
+
     setIsSubmitting(false);
+
     alert('Sorry, your enquiry could not be sent. Please try again.');
   }
 };
