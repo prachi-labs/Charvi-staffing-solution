@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
+
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Phone,
@@ -75,19 +77,42 @@ export const ContactSection: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    setIsSubmitting(true);
+  if (!validate()) return;
 
-    // Simulate reliable enquiry receipt
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      setFormData(initialForm);
-    }, 900);
-  };
+  setIsSubmitting(true);
+  setIsSuccess(false);
+
+  try {
+    await emailjs.send(
+      'service_b25dd3b',
+      'template_blp5uq',
+      {
+        name: formData.name,
+        company: formData.companyName,
+        phone: formData.phone,
+        email: formData.email,
+        location: formData.location,
+        workforce_category: formData.requirement,
+        requirement_details: formData.message,
+      },
+      {
+        publicKey: '0VKBrkHL2kMofxfo0',
+      }
+    );
+
+    setIsSubmitting(false);
+    setIsSuccess(true);
+    setFormData(initialForm);
+    setErrors({});
+  } catch (error) {
+    console.error('EmailJS Error:', error);
+    setIsSubmitting(false);
+    alert('Sorry, your enquiry could not be sent. Please try again.');
+  }
+};
 
   return (
     <section id="contact" className="relative py-24 sm:py-32 bg-[#071A2B] text-white overflow-hidden">
